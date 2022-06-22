@@ -182,13 +182,10 @@ class AbrController implements ComponentAPI {
       return;
     }
     const bwEstimate: number = this.bwEstimator.getEstimate();
-    logger.warn(`Fragment ${frag.sn}${
-      part ? ' part ' + part.index : ''
-    } of level ${
-      frag.level
-    } is loading too slowly and will cause an underbuffer; aborting and switching to level ${nextLoadLevel}
-      Current BW estimate: ${
-        Number.isFinite(bwEstimate) ? (bwEstimate / 1024).toFixed(3) : 'Unknown'
+    logger.warn(`Fragment ${frag.sn}${part ? ' part ' + part.index : ''
+      } of level ${frag.level
+      } is loading too slowly and will cause an underbuffer; aborting and switching to level ${nextLoadLevel}
+      Current BW estimate: ${Number.isFinite(bwEstimate) ? (bwEstimate / 1024).toFixed(3) : 'Unknown'
       } Kb/s
       Estimated load time for current fragment: ${fragLoadedDelay.toFixed(3)} s
       Estimated load time for the next fragment: ${fragLevelNextLoadedDelay.toFixed(
@@ -263,6 +260,7 @@ class AbrController implements ComponentAPI {
     // rationale is that buffer appending only happens once media is attached. This can happen when config.startFragPrefetch
     // is used. If we used buffering in that case, our BW estimate sample will be very large.
     const processingMs = stats.parsing.end - stats.loading.start;
+    console.log("stats: ", stats)
     this.bwEstimator.sample(processingMs, stats.loaded);
     stats.bwEstimate = this.bwEstimator.getEstimate();
     if (frag.bitrateTest) {
@@ -317,8 +315,8 @@ class AbrController implements ComponentAPI {
     const currentFragDuration = partCurrent
       ? partCurrent.duration
       : fragCurrent
-      ? fragCurrent.duration
-      : 0;
+        ? fragCurrent.duration
+        : 0;
     const pos = media ? media.currentTime : 0;
 
     // playbackRate is the absolute value of the playback rate; if media.playbackRate is 0, we use 1 to load as
@@ -348,8 +346,7 @@ class AbrController implements ComponentAPI {
       return bestLevel;
     }
     logger.trace(
-      `${
-        bufferStarvationDelay ? 'rebuffering expected' : 'buffer is empty'
+      `${bufferStarvationDelay ? 'rebuffering expected' : 'buffer is empty'
       }, finding optimal quality level`
     );
     // not possible to get rid of rebuffering ... let's try to find level that will guarantee less than maxStarvationDelay of rebuffering
@@ -416,8 +413,8 @@ class AbrController implements ComponentAPI {
     const currentFragDuration = partCurrent
       ? partCurrent.duration
       : fragCurrent
-      ? fragCurrent.duration
-      : 0;
+        ? fragCurrent.duration
+        : 0;
     for (let i = maxAutoLevel; i >= minAutoLevel; i--) {
       const levelInfo = levels[i];
 

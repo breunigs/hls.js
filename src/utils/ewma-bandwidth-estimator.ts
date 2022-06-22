@@ -40,8 +40,8 @@ class EwmaBandWidthEstimator {
     const durationS = durationMs / 1000;
     // value is bandwidth in bits/s
     const bandwidthInBps = numBits / durationS;
-    this.fast_.sample(durationS, bandwidthInBps);
-    this.slow_.sample(durationS, bandwidthInBps);
+    this.fast_.sample(1, bandwidthInBps);
+    this.slow_.sample(1, bandwidthInBps);
   }
 
   canEstimate(): boolean {
@@ -61,6 +61,6 @@ class EwmaBandWidthEstimator {
     }
   }
 
-  destroy() {}
+  destroy() { }
 }
 export default EwmaBandWidthEstimator;
